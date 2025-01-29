@@ -1,0 +1,18 @@
+{
+  "changelogDate": "20250121062859",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contant",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Post",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}
