@@ -22,7 +22,7 @@ public class FeignConfiguration {
      */
     @Bean
     feign.Logger.Level feignLoggerLevel() {
-        return feign.Logger.Level.FULL;
+        return feign.Logger.Level.HEADERS;
     }
     
     @Bean

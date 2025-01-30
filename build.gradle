@@ -172,6 +172,11 @@ dependencies {
 
     // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
+     // RESTHeart dependencies
+    implementation 'org.restheart:restheart:5.2.0' // Use the latest version
+
+    // BSON dependency for MongoDB
+    implementation 'org.mongodb:bson:4.5.1'
     implementation group: "tech.jhipster", name: "jhipster-framework"
     implementation "javax.annotation:javax.annotation-api"
     implementation "org.springframework.boot:spring-boot-starter-cache"
