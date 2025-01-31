@@ -77,7 +77,6 @@ public class PostController {
     }
 
     // Update an existing post
-    //Hello Harsh 
     @PutMapping("/blogApps/post/{id}")
     public ResponseEntity<?> updatePost(@PathVariable("id") String id, @RequestBody Post post)
             throws URISyntaxException {
