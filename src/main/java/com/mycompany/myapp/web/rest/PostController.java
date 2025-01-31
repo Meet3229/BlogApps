@@ -72,11 +72,12 @@ public class PostController {
                 .lastModifiedDate(Instant.now())
                 .build());
 
-        // Call Feign client to save the post
+        
         return postclient.save(post);
     }
 
     // Update an existing post
+    // Call Feign client to save the post
     @PutMapping("/blogApps/post/{id}")
     public ResponseEntity<?> updatePost(@PathVariable("id") String id, @RequestBody Post post)
             throws URISyntaxException {
