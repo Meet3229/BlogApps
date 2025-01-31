@@ -49,6 +49,7 @@ public class PostController {
     }
 
     // Create a new post
+    // this code only post create conreoller
     @PostMapping("/blogApps/post")
     public ResponseEntity<?> createPost(@RequestBody Post post) throws URISyntaxException {
         log.debug("REST request to save Post : {}", post);
@@ -72,8 +73,7 @@ public class PostController {
                 .build());
 
         // Call Feign client to save the post
-        ResponseEntity<Void> savePost = postclient.save(post);
-        return savePost;
+        return postclient.save(post);
     }
 
     // Update an existing post
