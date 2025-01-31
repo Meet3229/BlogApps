@@ -32,7 +32,7 @@ public class BlogAppsApp {
     }
 
     /**
-     * Initializes blogApps.
+     * Initializes BlogApps.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>

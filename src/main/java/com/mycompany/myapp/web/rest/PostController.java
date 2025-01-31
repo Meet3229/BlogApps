@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.CreateInfo;
 import com.mycompany.myapp.domain.Post;
 import com.mycompany.myapp.domain.RefType;
 import com.mycompany.myapp.domain.UpdateInfo;
 import com.mycompany.myapp.domain.RefType.RefTo;
+import com.mycompany.myapp.feign.CategoryClient;
 import com.mycompany.myapp.feign.Postclient;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -37,9 +40,12 @@ public class PostController {
 
     private final UserRepository userRepository;
 
-    public PostController(Postclient postclient, UserRepository userRepository) {
+    private final CategoryClient categoryClient;
+
+    public PostController(Postclient postclient, UserRepository userRepository, CategoryClient categoryClient) {
         this.userRepository = userRepository;
         this.postclient = postclient;
+        this.categoryClient = categoryClient;
     }
 
     // Create a new post
@@ -104,6 +110,35 @@ public class PostController {
 
         ResponseEntity<Void> deletePost = postclient.delete(id);
         return deletePost;
+    }
+
+
+    @PostMapping("/blogApps/category/{categoryId}/post")
+    public ResponseEntity<?> addPostToCategory(@PathVariable("categoryId") String categoryId, @RequestBody Post post)
+            throws URISyntaxException {
+        log.debug("REST request to add Post : {} to Category : {}", post, categoryId);
+        post.setId(new ObjectId().toHexString());
+        post.setCategory(new RefType(new ObjectId(categoryId).toHexString(), RefTo.Category));
+
+        Category cat = categoryClient.getById(categoryId).getBody();
+        cat.getPosts().add(new RefType(new ObjectId(post.getId()).toHexString(), RefTo.Post));
+        categoryClient.update(categoryId, cat);
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        post.setCreateInfo(CreateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .createdDate(Instant.now())
+                .build());
+
+        post.setUpdateInfo(UpdateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .lastModifiedDate(Instant.now())
+                .build());
+
+        return postclient.save(post);
     }
 
 }

@@ -16,7 +16,6 @@ plugins {
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
-    id "com.github.node-gradle.node"
     id "org.sonarqube"
     id "io.spring.nohttp"
     id "com.github.andygoossens.gradle-modernizer-plugin"
@@ -172,11 +171,11 @@ dependencies {
 
     // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
-     // RESTHeart dependencies
-    implementation 'org.restheart:restheart:5.2.0' // Use the latest version
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation "io.github.openfeign:feign-okhttp"
 
-    // BSON dependency for MongoDB
-    implementation 'org.mongodb:bson:4.5.1'
     implementation group: "tech.jhipster", name: "jhipster-framework"
     implementation "javax.annotation:javax.annotation-api"
     implementation "org.springframework.boot:spring-boot-starter-cache"
@@ -201,17 +200,10 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
-    implementation "io.github.openfeign:feign-okhttp"
-
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web"
     implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
-    implementation "org.springframework.cloud:spring-cloud-starter-config"
     implementation "org.springframework.security:spring-security-config"
     implementation "org.springframework.security:spring-security-web"
     implementation "io.jsonwebtoken:jjwt-api"
@@ -260,35 +252,6 @@ wrapper {
     gradleVersion = "7.4.2"
 }
 
-task webapp_test(type: NpmTask, dependsOn: "npm_install") {
-    args = ["run", "webapp:test"]
-}
 
-if (project.hasProperty("nodeInstall")) {
-    // Workaround node grade plugin not working on apple silicon https://github.com/node-gradle/gradle-node-plugin/issues/154
-    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
-    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
-    Boolean downloadNode = !os.isMacOsX() || arch.isAmd64()
-    node {
-        version = "16.14.0"
-        npmVersion = "8.6.0"
-        download = downloadNode
-    }
-
-    // Copy local node and npm to a fixed location for npmw
-    def fixedNode = tasks.register("fixedNode", Copy) {
-        from nodeSetup
-        into 'build/node'
-    }
-    tasks.named("nodeSetup").configure { finalizedBy fixedNode }
-
-    def fixedNpm = tasks.register("fixedNpm", Copy) {
-        from npmSetup
-        into 'build/node'
-    }
-    tasks.named("npmSetup").configure { finalizedBy fixedNpm }
-}
-
-test.dependsOn webapp_test
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo

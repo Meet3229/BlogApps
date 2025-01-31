@@ -14,23 +14,23 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 public interface Postclient {
 
     // Method to save a new post (POST request)
-    @PostMapping("/blogApps/post")
+    @PostMapping("/BlogApps/post")
     public ResponseEntity<Void> save(@RequestBody Post post) throws URISyntaxException;
 
     // Method to update an existing post (PUT request)
-    @PutMapping("/blogApps/post/{id}")
+    @PutMapping("/BlogApps/post/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") String id, @RequestBody Post post) throws URISyntaxException;
 
     // Method to get a post by id (GET request)
-    @GetMapping("/blogApps/post/{id}")
+    @GetMapping("/BlogApps/post/{id}")
     public ResponseEntity<Post> getById(@PathVariable("id") String id);
 
      // Method to get all posts (GET request)
-     @GetMapping("/blogApps/post")  // Assuming the endpoint for all posts is "/blogApps/posts"
+     @GetMapping("/BlogApps/post")  // Assuming the endpoint for all posts is "/BlogApps/posts"
      public ResponseEntity<List<Post>> findAll();
 
     // Method to delete a post by id (DELETE request)
-    @DeleteMapping("/blogApps/post/{id}")
+    @DeleteMapping("/BlogApps/post/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id);
 
 

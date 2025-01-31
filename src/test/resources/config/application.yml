@@ -13,13 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-  client:
-    enabled: false
-  instance:
-    appname: blogApps
-    instanceId: blogApps:${spring.application.instance-id:${random.value}}
-
 mongock:
   migration-scan-package:
     - com.mycompany.myapp.config.dbmigrations
@@ -30,10 +23,7 @@ mongock:
 
 spring:
   application:
-    name: blogApps
-  cloud:
-    config:
-      enabled: false
+    name: BlogApps
 
   jackson:
     serialization:
@@ -89,7 +79,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: ZWJkOWM0MTA3NzFhNTM3NGNjMDJjODdmYmZkOTBjNTFjOGMzZGZlYjNlZDU2MWNiMTMwM2I4NDIzMWQwZmExMjVjY2RmYTdiYTZiMDQwNTA2MWRlODc4YTNmYzM2YmRlMzNjOWM1OTg3N2Y2N2Q2NWZlMGIzOGNlNzBkNGM2MDA=
+        base64-secret: OWE1YjQ5NGEyMmVhMTJlYzkwOWUxZjY1ZDA0MmU3MjMzODI4YWVkMjUzYWEwNzM4ZTlkZDE2NzUxZGRjYjFlNGZkZjNmOTVkZGQ1ZGUxYmE3YmY1YzIwN2M0NGY2NzA1MjQ2ZTQzMzVlMjI5NTY2MTc4YmYxYWM1ODcxY2NlNTk=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
 # ===================================================================

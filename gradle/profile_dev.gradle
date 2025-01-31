@@ -22,34 +22,6 @@ bootRun {
     args = []
 }
 
-task webapp(type: NpmTask) {
-    inputs.property('appVersion', project.version)
-    inputs.files("package-lock.json")
-        .withPropertyName('package-lock')
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.files("build.gradle")
-        .withPropertyName('build.gradle')
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.dir("src/main/webapp/")
-        .withPropertyName("webapp-source-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    inputs.files("tsconfig.json")
-        .withPropertyName("tsconfig")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-
-    def webpackDevFiles = fileTree("webpack/")
-    webpackDevFiles.exclude("webpack.prod.js")
-    inputs.files(webpackDevFiles)
-        .withPropertyName("webpack-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    outputs.dir("build/resources/main/static/")
-        .withPropertyName("webapp-build-dir")
-
-    dependsOn npmInstall
-
-    args = ["run", "webapp:build"]
-    environment = [APP_VERSION: project.version]
-}
 
 processResources {
     inputs.property('version', version)
@@ -59,12 +31,5 @@ processResources {
             it.replace("#project.version#", version)
         }
     }
-    filesMatching("**/bootstrap.yml") {
-        filter {
-            it.replace("#spring.profiles.active#", profiles)
-        }
-    }
 }
 
-processResources.dependsOn webapp
-bootJar.dependsOn processResources

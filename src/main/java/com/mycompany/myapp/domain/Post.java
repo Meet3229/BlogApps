@@ -43,7 +43,11 @@ public class Post implements Serializable {
     private String contant;
 
     @Field("comments")
+    @Builder.Default
     List<RefType> comments = new ArrayList<>();
+
+    @Field("category")
+    private RefType category;
 
     @Field("create_info")
     private CreateInfo createInfo;
