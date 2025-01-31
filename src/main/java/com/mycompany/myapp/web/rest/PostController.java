@@ -77,13 +77,14 @@ public class PostController {
     }
 
     // Update an existing post
+    //Hello Harsh 
     @PutMapping("/blogApps/post/{id}")
     public ResponseEntity<?> updatePost(@PathVariable("id") String id, @RequestBody Post post)
             throws URISyntaxException {
         log.debug("REST request to update Post : {}", post);
 
-        ResponseEntity<Void> updatePost = postclient.update(id, post);
-        return updatePost;
+        return postclient.update(id, post);
+        
     }
 
     // Get a post by ID
