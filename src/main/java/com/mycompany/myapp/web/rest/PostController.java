@@ -108,7 +108,8 @@ public class PostController {
     @DeleteMapping("/blogApps/post/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable("id") String id) {
         log.debug("REST request to delete Post : {}", id);
-
+        
+        
         ResponseEntity<Void> deletePost = postclient.delete(id);
         return deletePost;
     }

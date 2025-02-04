@@ -6,6 +6,7 @@ import com.mycompany.myapp.domain.RefType;
 import com.mycompany.myapp.domain.RefType.RefTo;
 import com.mycompany.myapp.feign.CommentClient;
 import com.mycompany.myapp.feign.Postclient;
+import com.mycompany.myapp.repository.CommentRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 
 import org.bson.types.ObjectId;
@@ -24,8 +25,10 @@ public class CommentController {
 
     private final CommentClient commentClient;
     private final Postclient postClient;
+    private final CommentRepository commentRepository;
 
-    public CommentController(CommentClient commentClient, Postclient postClient) {
+    public CommentController(CommentClient commentClient, Postclient postClient, CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
         this.commentClient = commentClient;
         this.postClient = postClient;
     }
@@ -67,6 +70,13 @@ public class CommentController {
         return comment;
     }
 
+    @GetMapping("/blogApps/comment/post/{id}")
+
+    public ResponseEntity< List<Comment>> getAllCommentByPostId (@PathVariable String id){
+        List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(new ObjectId(id));
+        return ResponseEntity.ok().body(allCommentsByPostId);
+    }
+
     // Get all comments for a post
     @GetMapping("/blogApps/comment")
     public ResponseEntity<List<Comment>> getAllComments() {
@@ -80,10 +90,10 @@ public class CommentController {
     @DeleteMapping("/blogApps/comment/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable("id") String id) {
         log.debug("REST request to delete Comment : {}", id);
-
         ResponseEntity<Void> deleteComment = commentClient.delete(id);
         return deleteComment;
     }
+    
 
     // Add a comment to a specific post
     @PostMapping("/blogApps/post/{postId}/comment")
@@ -110,6 +120,12 @@ public class CommentController {
     }
 
    
+    @GetMapping("/blogApps/post/{postId}/comment")
+    public ResponseEntity<?> getallcommnetbyId(@PathVariable("postId") String postId){
+        List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(new ObjectId(postId));
+        return ResponseEntity.ok().body(allCommentsByPostId);
+    }
+
 
 
     

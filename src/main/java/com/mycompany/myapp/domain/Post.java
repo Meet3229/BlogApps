@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonInclude(Include.NON_NULL)
+@CrossOrigin(originPatterns = "http://localhost:35049")
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,7 +45,6 @@ public class Post implements Serializable {
     private String contant;
 
     @Field("comments")
-    @Builder.Default
     List<RefType> comments = new ArrayList<>();
 
     @Field("category")
