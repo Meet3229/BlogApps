@@ -60,10 +60,11 @@ public class PostController {
         if (post.getId() != null) {
             throw new BadRequestAlertException("A new post cannot already have an ID", "Post", "idexists");
         }
-        
+
         post.setComments(new ArrayList<>());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
+
 
         post.setCreateInfo(CreateInfo.builder()
                 .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
@@ -75,6 +76,7 @@ public class PostController {
                 .lastModifiedDate(Instant.now())
                 .build());
 
+                System.out.println(post +" **********-----------------");
         
         // Call Feign client to save the post
         return postclient.save(post);
