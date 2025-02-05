@@ -21,17 +21,19 @@ public interface Postclient {
     @PutMapping("/BlogApps/post/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") String id, @RequestBody Post post) throws URISyntaxException;
 
+    // Method to partially update an existing post (PATCH request)
+    @PatchMapping("/BlogApps/post/{id}")
+    public ResponseEntity<Void> patchUpdate(@PathVariable("id") String id, @RequestBody Post post) throws URISyntaxException;
+
     // Method to get a post by id (GET request)
     @GetMapping("/BlogApps/post/{id}")
     public ResponseEntity<Post> getById(@PathVariable("id") String id);
 
-     // Method to get all posts (GET request)
-     @GetMapping("/BlogApps/post")  // Assuming the endpoint for all posts is "/BlogApps/posts"
-     public ResponseEntity<List<Post>> findAll();
+    // Method to get all posts (GET request)
+    @GetMapping("/BlogApps/post")
+    public ResponseEntity<List<Post>> findAll();
 
     // Method to delete a post by id (DELETE request)
     @DeleteMapping("/BlogApps/post/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id);
-
-
 }

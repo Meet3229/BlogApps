@@ -45,7 +45,7 @@ public class Post implements Serializable {
     private String contant;
 
     @Field("comments")
-    List<RefType> comments = new ArrayList<>();
+    List<RefType> comments ;
 
     @Field("category")
     private RefType category;
@@ -65,9 +65,6 @@ public class Post implements Serializable {
         return comments;
     }
 
-    public void setComments(final List<RefType> comments) {
-        this.comments = comments;
-    }
 
    
 }
