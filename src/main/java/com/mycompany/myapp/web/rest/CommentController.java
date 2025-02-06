@@ -72,7 +72,7 @@ public class CommentController {
 
     @GetMapping("/blogApps/comment/post/{id}")
 
-    public ResponseEntity< List<Comment>> getAllCommentByPostId (@PathVariable String id){
+    public ResponseEntity<List<Comment>> getAllCommentByPostId(@PathVariable String id) {
         List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(new ObjectId(id));
         return ResponseEntity.ok().body(allCommentsByPostId);
     }
@@ -93,7 +93,6 @@ public class CommentController {
         ResponseEntity<Void> deleteComment = commentClient.delete(id);
         return deleteComment;
     }
-    
 
     // Add a comment to a specific post
     @PostMapping("/blogApps/post/{postId}/comment")
@@ -101,11 +100,11 @@ public class CommentController {
             throws URISyntaxException {
         log.debug("REST request to add Comment : {} to Post : {}", comment, postId);
         comment.setId(new ObjectId().toHexString());
-        comment.setPost(new RefType( new ObjectId(postId).toHexString()   ,  RefTo.Post));
+        comment.setPost(new RefType(new ObjectId(postId).toHexString(), RefTo.Post));
 
         ResponseEntity<Void> addCommentToPost = commentClient.save(comment);
         String location = addCommentToPost.getHeaders().get("Location").get(0);
-       String commentid = location.substring(location.lastIndexOf("/") + 1);
+        String commentid = location.substring(location.lastIndexOf("/") + 1);
 
         // Set the postId in the comment object before saving (assuming Comment has a
         // setPostId method)
@@ -114,19 +113,36 @@ public class CommentController {
         Post post = byId.getBody();
         post.getComments().add(new RefType(new ObjectId(commentid).toHexString(), RefTo.Comment));
         postClient.update(postId, post);
-        
+
         // Call Feign client to add the comment to the specific post
         return addCommentToPost;
     }
 
-   
     @GetMapping("/blogApps/post/{postId}/comment")
-    public ResponseEntity<?> getallcommnetbyId(@PathVariable("postId") String postId){
+    public ResponseEntity<?> getallcommnetbyId(@PathVariable("postId") String postId) {
         List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(new ObjectId(postId));
         return ResponseEntity.ok().body(allCommentsByPostId);
     }
 
+    @PatchMapping("/blogApps/comment/{id}")
+    public ResponseEntity<?> partialUpdateComment(@PathVariable("id") String id, @RequestBody Comment comment)
+            throws URISyntaxException {
+        log.debug("REST request to partial update Comment : {} with ID : {}", comment, id);
 
 
-    
+        Comment existingComment = commentClient.getById(id).getBody();
+        if (existingComment == null) {
+            throw new BadRequestAlertException("Comment not found", "Comment", "notfound");
+        }
+
+        // Update specific fields if provided in the request body
+        if (comment.getContant() != null) {
+            existingComment.setContant(comment.getContant());
+        }
+
+        // Save the updated comment
+        ResponseEntity<Void> updateComment = commentClient.partialUpdate(id, existingComment);
+        return updateComment;
+    }
+
 }

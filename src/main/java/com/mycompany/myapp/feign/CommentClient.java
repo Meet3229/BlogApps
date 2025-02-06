@@ -32,4 +32,9 @@ public interface CommentClient {
     // Method to delete a comment by id (DELETE request)
     @DeleteMapping("/BlogApps/comment/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id);
+
+    @PatchMapping("/BlogApps/comment/{id}")
+    public ResponseEntity<Void> partialUpdate(@PathVariable("id") String id, @RequestBody Comment comment) throws URISyntaxException;
+    
+
 }
