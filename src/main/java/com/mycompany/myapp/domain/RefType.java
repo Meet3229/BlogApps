@@ -26,7 +26,7 @@ public class RefType implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static enum RefTo {
-        Post, User, Comment , Category
+        Post, User, Comment , Category , jhi_user
     }
 
 

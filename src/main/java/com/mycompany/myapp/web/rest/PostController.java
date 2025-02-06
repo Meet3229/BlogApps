@@ -67,12 +67,12 @@ public class PostController {
 
 
         post.setCreateInfo(CreateInfo.builder()
-                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.jhi_user))
                 .createdDate(Instant.now())
                 .build());
 
         post.setUpdateInfo(UpdateInfo.builder()
-                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.jhi_user))
                 .lastModifiedDate(Instant.now())
                 .build());
 
@@ -142,12 +142,12 @@ public class PostController {
         String currentPrincipalName = authentication.getName();
 
         post.setCreateInfo(CreateInfo.builder()
-                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.jhi_user))
                 .createdDate(Instant.now())
                 .build());
 
         post.setUpdateInfo(UpdateInfo.builder()
-                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.jhi_user))
                 .lastModifiedDate(Instant.now())
                 .build());
 
